@@ -1,6 +1,5 @@
 import cv2
 import mediapipe as mp
-import pyautogui 
 
 mp_drawing = mp.solutions.drawing_utils
 mp_drawing_styles = mp.solutions.drawing_styles
@@ -96,18 +95,7 @@ with mp_face_mesh.FaceMesh(
             landmark_drawing_spec=None,
             connection_drawing_spec=mp_drawing_styles
             .get_default_face_mesh_iris_connections_style())
-        # Extracting nose landmark
-        nose_landmark = face_landmarks.landmark[mp_face_mesh.FaceLandmark.NOSE_TIP]
-        # Getting the nose position
-        height, width, _ = image.shape  # Get the image dimensions
-        nose_x = int(nose_landmark.x * width)
-        nose_y = int(nose_landmark.y * height)
-        # Move the mouse to nose position
-        screen_width, screen_height = pyautogui.size()  # Get screen size
-        mapped_x = int(nose_x * screen_width / width)
-        mapped_y = int(nose_y * screen_height / height)
-        pyautogui.moveTo(mapped_x, mapped_y, duration=0.1)  # Control mouse
-
+        
 
     # Flip the image horizontally for a selfie-view display.
     cv2.imshow('MediaPipe Face Mesh', cv2.flip(image, 1))
