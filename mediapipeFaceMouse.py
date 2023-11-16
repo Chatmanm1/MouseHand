@@ -44,7 +44,7 @@ with mp_face_mesh.FaceMesh(
                     if idx == 6:  # Assuming landmark 6 is the nose
                         nose_x = int(image.shape[1])-int(lm.x * image.shape[1])
                         nose_y = int(lm.y * image.shape[0])
-                        pyautogui.moveTo(nose_x*10, nose_y*10)
+                        pyautogui.moveTo(nose_x, nose_y)
 
         cv2.imshow('MediaPipe Face Mesh', cv2.flip(image, 1))
         if cv2.waitKey(1) & 0xFF == ord('q'):
