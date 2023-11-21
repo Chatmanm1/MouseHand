@@ -77,7 +77,7 @@ if file_path:
                 angle_deg = math.degrees(angle_rad)
 
                 # Display the angle on the frame
-                cv2.putText(frame, f"Angle: {angle_deg:.2f} degrees", (50, 50), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 0, 0), 2)
+                cv2.putText(frame, f"Legs to Hip Angle: {angle_deg:.2f} degrees", (50, 50), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 0, 0), 2)
 
         # Write the frame with pose landmarks to the output video file
         out.write(frame)
