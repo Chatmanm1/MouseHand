@@ -42,10 +42,21 @@ if file_path:
         if results.pose_landmarks:
             mp.solutions.drawing_utils.draw_landmarks(frame, results.pose_landmarks, mp_pose.POSE_CONNECTIONS)
 
+            # Calculate the distance between landmark 25 and 26
+            if results.pose_landmarks.landmark:
+                landmark_25 = results.pose_landmarks.landmark[25]
+                landmark_26 = results.pose_landmarks.landmark[26]
+                # Calculate distance between landmarks
+                dx = landmark_25.x - landmark_26.x
+                dy = landmark_25.y - landmark_26.y
+                distance = ((dx ** 2) + (dy ** 2)) ** 0.5
+                # Print distance on the frame
+                cv2.putText(frame, f"Distance: {distance:.2f}", (50, 50), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 0, 0), 2)
+
         # Write the frame with pose landmarks to the output video file
         out.write(frame)
 
-        # Display the frame with pose landmarks
+        # Display the frame with pose landmarks and distance
         cv2.imshow('Pose Detection', frame)
         if cv2.waitKey(1) & 0xFF == ord('q'):
             break
