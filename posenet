@@ -30,6 +30,11 @@ if file_path:
     output_file = 'output_with_landmarks.avi'  # Output video file name
     out = cv2.VideoWriter(output_file, fourcc, fps, (frame_width, frame_height))
 
+    #maximum height difference
+    max_height_variation = 0
+    avg_height_last = 0
+    avg_stride_len = 0
+
     while video_capture.isOpened():
         ret, frame = video_capture.read()
         if not ret:
@@ -46,15 +51,28 @@ if file_path:
             # Check if landmarks are present before accessing them
             if results.pose_landmarks.landmark:
                 # Calculate the angle between landmarks 25, 26, and the average of landmarks 23 and 24
+                #23 - left hip
+                #24 - right hip
+                ##29 - left heel
+                ##30 - right heel
+                #25 - left knee
+                #26 - right knee
+
                 landmark_23 = results.pose_landmarks.landmark[23]
                 landmark_24 = results.pose_landmarks.landmark[24]
                 landmark_25 = results.pose_landmarks.landmark[25]
                 landmark_26 = results.pose_landmarks.landmark[26]
+                landmark_29 = results.pose_landmarks.landmark[29]
+                landmark_30 = results.pose_landmarks.landmark[30]
 
-                # Calculate the average of landmarks 23 and 24
+
+                # Calculate the average of landmarks 23 and 24 as well as 
                 avg_landmark_x = (landmark_23.x + landmark_24.x) / 2
                 avg_landmark_y = (landmark_23.y + landmark_24.y) / 2
                 avg_landmark_z = (landmark_23.z + landmark_24.z) / 2
+
+
+
 
                 # Calculate vectors for the three points
                 vec1_x = landmark_25.x - avg_landmark_x
@@ -67,6 +85,14 @@ if file_path:
                 magnitude_vec1 = ((vec1_x ** 2) + (vec1_y ** 2)) ** 0.5
                 magnitude_vec2 = ((vec2_x ** 2) + (vec2_y ** 2)) ** 0.5
 
+                height_variation = abs(avg_landmark_y- avg_height_last)
+
+                if landmark_30.x - landmark_29.x > avg_stride_len:
+                    avg_stride_len = landmark_30.x - landmark_29.x 
+
+                if height_variation > max_height_variation:
+                    max_height_variation = height_variation
+                
                 # Calculate the cosine of the angle
                 cosine_angle = dot_product / (magnitude_vec1 * magnitude_vec2)
 
@@ -78,6 +104,10 @@ if file_path:
 
                 # Display the angle on the frame
                 cv2.putText(frame, f"Legs to Hip Angle: {angle_deg:.2f} degrees", (50, 50), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 0, 0), 2)
+                cv2.putText(frame, f"Hip height variation:{height_variation:.4f}",(50, 100), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 0, 0), 2)
+                cv2.putText(frame, f"Max Stride Length:{avg_stride_len:.2f}",(50, 150), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 0, 0), 2)
+                
+                avg_height_last = avg_landmark_y
 
         # Write the frame with pose landmarks to the output video file
         out.write(frame)
