@@ -37,6 +37,7 @@ if file_path:
     max_height_variation = 0
     avg_height_last = 0
     max_stride_len = 0
+    contact_time = 0
 
     while video_capture.isOpened():
         ret, frame = video_capture.read()
@@ -108,11 +109,24 @@ if file_path:
                 angle_deg = math.degrees(angle_rad)
 
                 # Display the angle on the frame
+
+                # calulate ground time
+                  # Check if the Y-coordinate of landmark_11 remains the same
+                if prev_y is None:
+                    prev_y = landmark_11.y
+                elif abs(landmark_11.y - prev_y) < 0.05:  # Adjust threshold for continuity
+                    continuous_time += 1 / fps  # Increment time if Y-coordinate remains nearly the same
+                else:
+                    continuous_time = 0  # Reset time if Y-coordinate changes significantly
+                    prev_y = landmark_11.y  # Update previous Y-coordinate
+
+
                 ##cv2.line(frame, (sholder_avg_x, sholder_avg_y), (avg_landmark_x, avg_landmark_y), (0, 255, 0), 3)
-                cv2.putText(frame, f"Legs to Hip Angle: {angle_deg:.2f} degrees", (50, 50), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 0, 0), 2)
-                cv2.putText(frame, f"Hip height variation:{height_variation:.4f}",(50, 100), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 0, 0), 2)
-                cv2.putText(frame, f"Max Stride Length:{max_stride_len:.2f}",(50, 150), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 0, 0), 2)
-                
+                cv2.putText(frame, f"Legs to Hip Angle: {angle_deg:.2f} degrees", (50, 50), cv2.FONT_HERSHEY_SIMPLEX, .5, (255, 0, 0), 2)
+                cv2.putText(frame, f"Hip height variation:{height_variation:.4f}",(50, 100), cv2.FONT_HERSHEY_SIMPLEX, .5, (255, 0, 0), 2)
+                cv2.putText(frame, f"Max Stride Length:{max_stride_len:.2f}",(50, 150), cv2.FONT_HERSHEY_SIMPLEX, .5, (255, 0, 0), 2)
+                cv2.putText(frame, f"ground contact Time: {continuous_time:.2f} seconds", (50, 200), cv2.FONT_HERSHEY_SIMPLEX, .5, (255, 0, 0), 2)
+
                 
                 avg_height_last = avg_landmark_y
 
