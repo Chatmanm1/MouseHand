@@ -121,7 +121,7 @@ if file_path:
                     prev_y = landmark_11.y  # Update previous Y-coordinate
 
 
-                cv2.line(frame, (sholder_avg_x, sholder_avg_y), (avg_landmark_x, avg_landmark_y), (0, 255, 0), 3)
+                ##cv2.line(frame, (sholder_avg_x, sholder_avg_y), (avg_landmark_x, avg_landmark_y), (0, 255, 0), 3)
                 cv2.putText(frame, f"Legs to Hip Angle: {angle_deg:.2f} degrees", (50, 50), cv2.FONT_HERSHEY_SIMPLEX, .5, (255, 0, 0), 2)
                 cv2.putText(frame, f"Hip height variation:{height_variation:.4f}",(50, 100), cv2.FONT_HERSHEY_SIMPLEX, .5, (255, 0, 0), 2)
                 cv2.putText(frame, f"Max Stride Length:{max_stride_len:.2f}",(50, 150), cv2.FONT_HERSHEY_SIMPLEX, .5, (255, 0, 0), 2)
