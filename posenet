@@ -32,11 +32,11 @@ if file_path:
 
     #maximum height difference
     max_height_variation = 0
+    avg_height_last = 0
     max_stride_len = 0
     max_height_variation = 0
     avg_height_last = 0
     max_stride_len = 0
-    prev_y = None
     contact_time = 0
 
     while video_capture.isOpened():
@@ -90,11 +90,9 @@ if file_path:
                 dot_product = vec1_x * vec2_x + vec1_y * vec2_y
                 magnitude_vec1 = ((vec1_x ** 2) + (vec1_y ** 2)) ** 0.5
                 magnitude_vec2 = ((vec2_x ** 2) + (vec2_y ** 2)) ** 0.5
-                
+
                 height_variation = abs(avg_landmark_y- avg_height_last)
 
-              
-               
                 if landmark_30.x - landmark_29.x > max_stride_len:
                     max_stride_len = landmark_30.x - landmark_29.x 
 
@@ -123,7 +121,7 @@ if file_path:
                     prev_y = landmark_11.y  # Update previous Y-coordinate
 
 
-                ##cv2.line(frame, (sholder_avg_x, sholder_avg_y), (avg_landmark_x, avg_landmark_y), (0, 255, 0), 3)
+                cv2.line(frame, (sholder_avg_x, sholder_avg_y), (avg_landmark_x, avg_landmark_y), (0, 255, 0), 3)
                 cv2.putText(frame, f"Legs to Hip Angle: {angle_deg:.2f} degrees", (50, 50), cv2.FONT_HERSHEY_SIMPLEX, .5, (255, 0, 0), 2)
                 cv2.putText(frame, f"Hip height variation:{height_variation:.4f}",(50, 100), cv2.FONT_HERSHEY_SIMPLEX, .5, (255, 0, 0), 2)
                 cv2.putText(frame, f"Max Stride Length:{max_stride_len:.2f}",(50, 150), cv2.FONT_HERSHEY_SIMPLEX, .5, (255, 0, 0), 2)
