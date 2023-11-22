@@ -32,11 +32,11 @@ if file_path:
 
     #maximum height difference
     max_height_variation = 0
-    avg_height_last = 0
     max_stride_len = 0
     max_height_variation = 0
     avg_height_last = 0
     max_stride_len = 0
+    prev_y = None
     contact_time = 0
 
     while video_capture.isOpened():
@@ -90,9 +90,11 @@ if file_path:
                 dot_product = vec1_x * vec2_x + vec1_y * vec2_y
                 magnitude_vec1 = ((vec1_x ** 2) + (vec1_y ** 2)) ** 0.5
                 magnitude_vec2 = ((vec2_x ** 2) + (vec2_y ** 2)) ** 0.5
-
+                
                 height_variation = abs(avg_landmark_y- avg_height_last)
 
+              
+               
                 if landmark_30.x - landmark_29.x > max_stride_len:
                     max_stride_len = landmark_30.x - landmark_29.x 
 
